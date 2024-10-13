@@ -60,34 +60,33 @@ class Workout extends Model
         return $this->hasOne(Participant::class);
     }
 
-    public function calculateScore()
-{
-    // Ambil semua log kuis untuk workout ini
-    $logs = $this->WorkOutQuiz;
+//     public function calculateScore()
+// {
+//     // Ambil semua log kuis untuk workout ini
+//     $logs = $this->WorkOutQuiz;
 
-    // Variabel untuk menghitung jumlah jawaban yang benar
-    $correctCount = 0;
-    $totalQuestions = $logs->count();
+//     // Variabel untuk menghitung jumlah jawaban yang benar
+//     $correctCount = 0;
+//     $totalQuestions = $logs->count();
 
-    // Iterasi setiap log dan hitung jawaban benar
-    foreach ($logs as $log) {
-        if ($log->score > 0) {
-            $correctCount++;
-        }
-    }
+//     // Iterasi setiap log dan hitung jawaban benar
+//     foreach ($logs as $log) {
+//         if ($log->score > 0) {
+//             $correctCount++;
+//         }
+//     }
 
-    // Hitung persentase skor
-    $scorePercentage = $totalQuestions > 0 ? ($correctCount / $totalQuestions) * 100 : 0;
+//     // Hitung persentase skor
+//     $scorePercentage = $totalQuestions > 0 ? ($correctCount / $totalQuestions) * 100 : 0;
 
-    // Update skor di workout
-    $this->update([
-        'score' => round($scorePercentage),
-        'is_completed' => 1,
-        'date_get_score' => Carbon::now(),
-    ]);
+//     // Update skor di workout
+//     $this->update([
+//         'score' => round($scorePercentage),
+//         'is_completed' => 1,
+//         'date_get_score' => Carbon::now(),
+//     ]);
 
 
     
 }
 
-}

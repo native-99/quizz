@@ -16,7 +16,7 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->string("title");
-            $table->string("question_body");
+            $table->text("question_body");
             $table->unsignedBigInteger("question_type_id");
             $table->foreign('question_type_id')->references('id')->on('question_types');
             $table->json('answer')->nullable();

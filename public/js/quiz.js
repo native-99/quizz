@@ -15,7 +15,7 @@ $(document).ready(function () {
             height: "auto",
             width: 400,
             modal: true,
-            
+
             buttons: {
                 "Save And Close": function () {
                     $(this).dialog("close");
@@ -28,6 +28,8 @@ $(document).ready(function () {
         });
     });
 });
+
+
 
 function OnePage() {
     $("#questions").show();
@@ -63,14 +65,14 @@ function saveAndClose() {
         $(".workout_questions").each(function () {
             var data = $(this).serialize();
             var url = $(this).attr("action");
-    
-            $.post(url, data, function (data) {});
+
+            $.post(url, data, function (data) { });
         })
-       ).then(function () {
-            window.location.reload();
-       });
+    ).then(function () {
+        window.location.reload();
+    });
 
-    
 
-    
+
+
 }

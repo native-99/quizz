@@ -13,7 +13,7 @@ use App\Utility\Workout\WorkoutService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session; // Tambahkan ini
-
+use AppUtility\Question\Traits\WorkoutViewRender;
 
 class WorkoutController extends Controller
 {
@@ -54,30 +54,36 @@ class WorkoutController extends Controller
      * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
 
-    // public function completedAndNext(Workout $workout)
-    // {
-    //     if ($workout->is_completed == 0)
-    //         $workout->Completed();
-
-    //     return redirect()->back();
-    // }
-
     public function completedAndNext(Workout $workout)
     {
-        // Pastikan workout belum selesai, lalu hitung skor dan tandai sebagai selesai
-        if (!$workout->is_completed) {
-            $workout->calculateScore(); // Menghitung skor dan update data workout
-        }
+        if ($workout->is_completed == 0)
+            $workout->workoutScoreUpdate(); // Menghitung skor dan update data workout
 
-        // Redirect ke halaman sebelumnya dengan pesan berhasil
-        return redirect()->back()->with('success', __('Workout completed successfully.'));
+            $workout->Completed();
+
+        return redirect();
     }
+
+    // public function completedAndNext(Workout $workout)
+    // {
+    //     // Pastikan workout belum selesai, lalu hitung skor dan tandai sebagai selesai
+    //     if (!$workout->is_completed) {
+    //         $workout->workoutScoreUpdate(); // Menghitung skor dan update data workout
+    //     }
+
+    //     // Redirect ke halaman sebelumnya dengan pesan berhasil
+    //     return redirect()->back()->with('success', __('Workout completed successfully.'));
+    // }
 
     /**
      * Store a newly created resource in storage.
      *
      * @return \Illuminate\Http\JsonResponse
      */
+
+
+    // ===================================================================
+
     public function workout(Request $request)
     {
 
@@ -96,5 +102,14 @@ class WorkoutController extends Controller
         return response()->json($result);
     }
     
+
+    // ===================================================================
+
+
+
+
+
+
+
 
 }
