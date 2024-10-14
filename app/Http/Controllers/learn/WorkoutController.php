@@ -38,16 +38,15 @@ class WorkoutController extends Controller
      */
     public function task(Participant $participant, Sessionable $sessionable)
     {
-        
         $className = $sessionable->sessionable_type;
-        
+
         $task = TaskFactory::Build($className);
         $task->set_user(Auth::user());
-        return $task->Render($participant, $sessionable);
+        return $task->Render($participant, $sessionable); // fungsi render dari mana ?
     }
 
 
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -59,7 +58,7 @@ class WorkoutController extends Controller
         if ($workout->is_completed == 0)
             $workout->workoutScoreUpdate(); // Menghitung skor dan update data workout
 
-            $workout->Completed();
+        $workout->Completed();
 
         return redirect();
     }
@@ -86,7 +85,7 @@ class WorkoutController extends Controller
 
     public function workout(Request $request)
     {
-
+        dd($request);
         $request->validate([
             'question_id' => 'required|int',
             'workout_id' => 'required|int'
@@ -101,7 +100,7 @@ class WorkoutController extends Controller
 
         return response()->json($result);
     }
-    
+
 
     // ===================================================================
 

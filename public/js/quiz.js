@@ -60,7 +60,6 @@ function scrollToAnchor(question) {
 }
 
 function saveAndClose() {
-
     $.when(
         $(".workout_questions").each(function () {
             var data = $(this).serialize();
