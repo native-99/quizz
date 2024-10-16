@@ -17,7 +17,7 @@ trait WorkoutViewRender
     protected WorkoutQuizLog $workoutQuizQuestion;
     protected Quiz $quiz;
 
-        
+
     /**
      * setQuizId
      *
@@ -30,7 +30,7 @@ trait WorkoutViewRender
             $this->quiz = Quiz::findorfail($quiz_id);
     }
 
-    
+
     /**
      * store
      *
@@ -40,7 +40,7 @@ trait WorkoutViewRender
      */
     public function store(?array $ids, array $attributes)
     {
-        
+
         if (!empty($this->quiz)) {
             $this->quiz->Questions()->create($attributes, ['order' => $this->quiz->Questions()->max('order') + 1]);
         } else {
@@ -49,7 +49,7 @@ trait WorkoutViewRender
     }
 
 
-    
+
     /**
      * workoutScoreUpdate
      *
@@ -58,21 +58,22 @@ trait WorkoutViewRender
      */
     public function workoutScoreUpdate(Workout $workout): int
     {
+        // dd($workout);
         $workoutQuiz = $workout->WorkOutQuiz;
         $sumOfScore = 0;
-       
-        $is_completed = true;
+
+        $is_completed = false;
         $is_mentor = false;
         foreach ($workoutQuiz as $question) {
             if ($is_mentor == false && $question->is_mentor) {
-                
+
                 $is_completed = false;
                 $is_mentor = true;
             }
             $sumOfScore += (int)$question->score;
         }
 
-        
+
         $score = (int)($sumOfScore /  count($workoutQuiz));
 
         $workout->update([
@@ -86,7 +87,7 @@ trait WorkoutViewRender
     }
 
 
-    
+
     /**
      * workoutChecker
      *
@@ -99,7 +100,7 @@ trait WorkoutViewRender
     {
         $workoutQuizQuestion = WorkoutQuizLog::where('workout_id', $workout->id)
             ->where('question_id', $question->id)->first();
-       
+
 
         $this->question = $question;
         $this->workout = $workout;
@@ -110,7 +111,7 @@ trait WorkoutViewRender
     }
 
 
-    
+
     /**
      * ReviewChecker
      *
@@ -133,7 +134,7 @@ trait WorkoutViewRender
     }
 
 
-    
+
     /**
      * createViewAsLearner
      *

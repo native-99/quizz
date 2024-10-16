@@ -19,13 +19,15 @@ class QuizAdapter extends TaskParent
 
     public function Render(Participant $participant, Sessionable $sessionable)
     {
+        // dd('stop process');
         $workout = WorkoutService::checkExistWorkout($participant->id, $sessionable, $this->user);
-        
-        if(empty($workout)){
+
+        // dd($workout);
+        if (empty($workout)) {
             $model = $sessionable->Model;
-            return view($this->prepare, compact(['participant' , 'model', 'sessionable']));
+            return view($this->prepare, compact(['participant', 'model', 'sessionable']));
         }
-        
+
         $activity = $sessionable->Model;
 
         if (!$this->checkMentorCanBeAccess($workout))
@@ -34,25 +36,27 @@ class QuizAdapter extends TaskParent
         if ($workout->is_completed || $workout->is_mentor)
             return $this->Review($participant, $workout, $activity);
 
-        
-
         WorkoutService::setWorkOutQuizSyncForThisExcersice($workout, $sessionable->Model);
 
 
         return view($this->view, compact([
-            'activity', 'workout', 'participant'
+            'activity',
+            'workout',
+            'participant'
         ]));
     }
 
     public function Review(Participant $participant, Workout $workout, $activity)
     {
-        
+
         if (!$this->checkMentorCanBeAccess($workout))
             return redirect()->back()->with('danger', __('for this task, review is not exist.'));
 
 
         return view($this->review, compact([
-            'participant', 'workout', 'activity'
+            'participant',
+            'workout',
+            'activity'
         ]));
     }
 

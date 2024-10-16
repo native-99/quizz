@@ -42,6 +42,8 @@ class WorkoutController extends Controller
 
         $task = TaskFactory::Build($className);
         $task->set_user(Auth::user());
+
+        // dd($task);
         return $task->Render($participant, $sessionable); // fungsi render dari mana ?
     }
 
@@ -55,9 +57,12 @@ class WorkoutController extends Controller
 
     public function completedAndNext(Workout $workout)
     {
-        if ($workout->is_completed == 0)
-            $workout->workoutScoreUpdate(); // Menghitung skor dan update data workout
+        if ($workout->is_completed == 0) {
+            $workout->workoutScoreUpdate(); // Menghitung skor dan update data workout fungsi workoutScoreUpdate ko ga ada di model
+            // dd($workout->workoutScoreUpdate());
+        }
 
+        // dd('test');
         $workout->Completed();
 
         return redirect();
@@ -83,23 +88,67 @@ class WorkoutController extends Controller
 
     // ===================================================================
 
+
+
+    // public function workout(Request $request)
+    // {
+    //     $request->validate([
+    //         'question_id' => 'required|int',
+    //         'workout_id' => 'required|int',
+    //     ]);
+
+    //     try {
+    //         $question = Question::findOrFail($request->question_id);
+    //         $workout = Workout::findOrFail($request->workout_id);
+
+    //         // Assuming answer is being posted as 'answer'
+    //         $selectedAnswer = $request->input('answer-' . $question->id);
+
+    //         // Save answer logic here
+    //         // UserAnswer::create(...); (save to DB, then set session data)
+
+    //         // Set selected answer in session for persistence
+    //         session()->put("workout_answers.{$question->id}", $selectedAnswer);
+
+    //         return redirect()->back()->with('success', __('Jawaban berhasil disimpan'));
+    //     } catch (\Exception $e) {
+    //         return redirect()->back()->with('error', __('Terjadi kesalahan saat menyimpan jawaban.'));
+    //     }
+    // }
+
+
     public function workout(Request $request)
     {
-        dd($request);
         $request->validate([
-            'question_id' => 'required|int',
-            'workout_id' => 'required|int'
+            'question_id' => 'required|integer|exists:questions,id',
+            'workout_id' => 'required|integer|exists:workouts,id',
+            'answer-' . $request->question_id => 'required',
         ]);
 
+        try {
+            $question = Question::findOrFail($request->question_id);
+            $workout = Workout::findOrFail($request->workout_id);
 
-        $question = Question::findorfail($request->question_id);
-        $workout = Workout::findorfail($request->workout_id);
+            $selectedAnswer = $request->input('answer-' . $question->id);
 
-        $result =  QuestionFactory::Build($question->questionType)
-            ->workoutChecker($question, $workout, $request);
+            // Save answer to the database
+            // UserAnswer::updateOrCreate(...);
 
-        return response()->json($result);
+            // Update session
+            session()->put("workout_answers.{$question->id}", $selectedAnswer);
+
+            // Debug: Dump session data
+            // dd(session('workout_answers'));
+
+            return redirect()->back()->with('success', __('Jawaban berhasil disimpan'));
+        } catch (\Exception $e) {
+            \Log::error('Error saving workout answer: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', __('Terjadi kesalahan saat menyimpan jawaban.'));
+        }
     }
+
+
 
 
     // ===================================================================

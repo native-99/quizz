@@ -5,26 +5,28 @@
             <h6 class="m-0 font-weight-bold text-primary">{{ $question->title }}</h6>
         </div>
         <div class="card-body">
-            <form class="workout_questions" id="question-{{ $question->id }}" method="post" action="{{ route("quizWorkout") }}">
+            <form class="workout_questions" id="question-{{ $question->id }}" method="post"
+                action="{{ route('quizWorkout') }}">
                 @csrf
                 <input type="hidden" value="{{ $question->id }}" name="question_id">
                 <input type="hidden" value="{{ $workout->id }}" name="workout_id">
-            <p>
-                {{ $question->question_body }}
-            </p>
+                <p>
+                    {{ $question->question_body }}
+                </p>
 
 
-            @forelse($answer->answers as $index => $answer)
-                <div class=" p-2">
-                    <input name="answer-{{ $question->id}}" type="text" class="form-control" id="answer-{{ $question->id }}">                
-                </div>
-            @empty 
-            @endforelse
+                @forelse($answer->answers as $index => $answer)
+                    <div class=" p-2">
+                        <input name="answer-{{ $question->id }}" type="text" class="form-control"
+                            id="answer-{{ $question->id }}">
+                    </div>
+                @empty
+                @endforelse
 
-            <input type="submit" value="{{ __('save') }}" class="btn btn-primary mt-3 " />
+                {{-- <input type="submit" value="{{ __('save') }}" class="btn btn-primary mt-3 " /> --}}
             </form>
         </div>
-   
+
     </div>
 
 </div>
